@@ -1,6 +1,6 @@
 {
-  "name": "Figma Plugin Template",
-  "id": "00000000",
+  "name": "OKLCH Color Variations",
+  "id": "1261721955648857186",
   "api": "1.0.0",
   "main": "dist/code.js",
   "ui": "dist/ui.html",

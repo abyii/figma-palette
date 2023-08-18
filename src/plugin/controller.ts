@@ -1,28 +1,47 @@
-figma.showUI(__html__, { themeColors: true });
+figma.showUI(__html__);
 
-figma.ui.resize(600, 600);
+figma.ui.resize(700, 700);
 
-figma.ui.onmessage = (msg) => {
-  if (msg.type === 'create-rectangles') {
-    const nodes = [];
+type Message = {
+  type: 'add-to-figma';
+  colors: [{ r: number; g: number; b: number }];
+  createVars: boolean;
+  name: string;
+};
 
-    for (let i = 0; i < msg.count; i++) {
-      const rect = figma.createRectangle();
-      rect.x = i * 150;
-      rect.fills = [{ type: 'SOLID', color: { r: 1, g: 0.5, b: 0 } }];
-      figma.currentPage.appendChild(rect);
-      nodes.push(rect);
+figma.ui.onmessage = (msg: Message) => {
+  if (msg.type === 'add-to-figma') {
+    const frame = figma.createFrame();
+    frame.layoutMode = 'HORIZONTAL';
+    frame.layoutPositioning = 'AUTO';
+    frame.overflowDirection = 'HORIZONTAL';
+    frame.fills = [];
+    let collection;
+    if (msg.createVars) {
+      collection = figma.variables.createVariableCollection(`${msg.name}-colors`);
     }
-
-    figma.currentPage.selection = nodes;
-    figma.viewport.scrollAndZoomIntoView(nodes);
-
-    // This is how figma responds back to the ui
-    figma.ui.postMessage({
-      type: 'create-rectangles',
-      message: `Created ${msg.count} Rectangles`,
+    msg.colors.forEach((c, i) => {
+      const rect = figma.createRectangle();
+      rect.fills = [
+        {
+          type: 'SOLID',
+          color: {
+            r: c.r,
+            g: c.g,
+            b: c.b,
+          },
+        },
+      ];
+      frame.appendChild(rect);
+      if (msg.createVars) {
+        const colorVariable = figma.variables.createVariable(`${msg.name}-${i * 10}`, collection.id, 'COLOR');
+        colorVariable.setValueForMode(collection.modes[0].modeId, { r: c.r, g: c.g, b: c.b });
+      }
     });
-  }
 
-  // figma.closePlugin();
+    figma.currentPage.appendChild(frame);
+    figma.currentPage.selection = [frame];
+    figma.viewport.scrollAndZoomIntoView([frame]);
+    figma.notify(`Added ${msg.colors.length} Shades as Rectangles ${msg.createVars && 'and Created Variables.'}`);
+  }
 };
