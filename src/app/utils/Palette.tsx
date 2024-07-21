@@ -40,6 +40,7 @@ export class Palette {
   }
 
   private generateChannels() {
+    // @ts-ignore
     const baseColorOKLCH = new Color(this.baseColorHex).oklch;
     this.lightnessChannel = Array.from({ length: this._numberOfShades }).map(
       (_, i) => (0.9 / (this._numberOfShades - 1)) * i + 0.08

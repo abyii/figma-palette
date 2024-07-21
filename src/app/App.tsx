@@ -1,35 +1,42 @@
 import React, { useState } from 'react';
 import { State } from './types';
-import { Palette } from './utils';
-import Editor from './components/Editor';
-import PaletteDisplay from './components/PaletteDisplay';
+import { MAX_PALETTES, Palette } from './utils';
+// import Editor from './components/Editor';
+// import PaletteDisplay from './components/PaletteDisplay';
 import './index.css';
-import Button from './components/ui/Button';
+// import Button from './components/ui/Button';
+import Tabs from './components/Tabs';
 import ReadMe from './components/ReadMe';
+import { greekAlphabets } from './utils/greekAlphas';
+import PaletteDisplay from './components/PaletteDisplay';
 
 function App() {
-  const [state, setState] = useState<State>({ palettes: [new Palette('A')], selectedIndex: 0 });
+  const [state, setState] = useState<State>({ palettes: [new Palette('Alpha')], selectedIndex: 'README' });
+
+  const changeSelectedIndex = (t: State['selectedIndex']) => {
+    setState({ ...state, selectedIndex: t });
+  };
+  const createNewPalette = () => {
+    if (state.palettes.length >= MAX_PALETTES) return;
+    const newPalette = new Palette(greekAlphabets[state.palettes.length]);
+    setState({
+      ...state,
+      palettes: [...state.palettes, newPalette],
+      selectedIndex: state.palettes.length,
+    });
+  };
+
   return (
-    <div className="w-full h-full flex bg-zinc-300 overflow-x-auto">
-      <ReadMe />
-      {state.palettes.map((_, i) => (
-        <div key={i} className="flex rounded-md m-5 shadow-md">
-          <PaletteDisplay index={i} state={state} setState={setState} />
-          {i == state.selectedIndex ? <Editor state={state} setState={setState} /> : null}
-        </div>
-      ))}
-      <Button
-        className="my-5 text-lg font-semibold shadow-md"
-        onClick={() => {
-          setState({
-            ...state,
-            palettes: [...state.palettes, new Palette(String.fromCharCode(state.palettes.length + 65))],
-          });
-        }}
-      >
-        +
-      </Button>
-    </div>
+    <main className="w-full h-full flex flex-col bg-neutral-700 overflow-x-hidden">
+      <Tabs state={state} onChangeTab={changeSelectedIndex} onNewTab={createNewPalette} />
+      {state.selectedIndex == 'README' ? (
+        <ReadMe />
+      ) : state.selectedIndex == 'CMP' ? (
+        <div></div>
+      ) : (
+        <PaletteDisplay setState={setState} state={state} />
+      )}
+    </main>
   );
 }
 
