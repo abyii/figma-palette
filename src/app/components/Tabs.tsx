@@ -1,5 +1,5 @@
 import React from 'react';
-import { State } from '../types';
+import { DispatchAction, State } from '../types';
 import { MAX_PALETTES } from '../utils';
 import { CompareIcon, PlusIcon, ReadmeIcon } from './icons';
 
@@ -30,14 +30,13 @@ const TabButton: React.FC<{
 
 const Tabs: React.FC<{
   state: State;
-  onChangeTab: (index: State['selectedIndex'] | number) => void;
-  onNewTab: () => void;
-}> = ({ state, onChangeTab, onNewTab }) => {
+  dispatch: React.Dispatch<DispatchAction>;
+}> = ({ state, dispatch }) => {
   return (
-    <div className="fixed top-0 w-full flex bg-neutral-900 shadow-inner">
+    <div className="fixed top-0 w-full flex bg-neutral-900">
       {/* First tab: readme */}
       <TabButton
-        onClick={() => onChangeTab('README')}
+        onClick={() => dispatch({ type: 'SELECT_INDEX', payload: 'README' })}
         label={<ReadmeIcon />}
         highlighted={state.selectedIndex == 'README'}
       />
@@ -45,7 +44,7 @@ const Tabs: React.FC<{
         return (
           <TabButton
             key={index}
-            onClick={() => onChangeTab(index)}
+            onClick={() => dispatch({ type: 'SELECT_INDEX', payload: index })}
             label={palette?.name}
             highlighted={state.selectedIndex == index}
           />
@@ -54,14 +53,14 @@ const Tabs: React.FC<{
       <TabButton
         className="text-base text-orange-500 hover:text-orange-400"
         disabled={state.palettes.length >= MAX_PALETTES}
-        onClick={() => onNewTab()}
+        onClick={() => dispatch({ type: 'CREATE_PALETTE' })}
         label={<PlusIcon />}
         highlighted={false}
       />
-      <div className="flex-1 flex "></div>
+      <div className="flex-1 flex"></div>
       {/* Last tab: compare */}
       <TabButton
-        onClick={() => onChangeTab('CMP')}
+        onClick={() => dispatch({ type: 'SELECT_INDEX', payload: 'CMP' })}
         label={<CompareIcon />}
         highlighted={state.selectedIndex == 'CMP'}
       />

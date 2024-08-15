@@ -5,4 +5,10 @@ export type State = {
   selectedIndex: number | 'README' | 'CMP'; // readme tab or any palette or compare tab.
 };
 
-export type Action = { newState: State };
+export type DispatchAction =
+  | { type: 'CREATE_PALETTE' }
+  | { type: 'SELECT_INDEX'; payload: State['selectedIndex'] }
+  | {
+      type: 'UPDATE_CURRENT_PALETTE';
+      payload: { palette: Palette };
+    };
