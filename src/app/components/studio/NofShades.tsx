@@ -21,7 +21,7 @@ const NofShades: React.FC<{ palette: Palette; dispatch: Dispatch<DispatchAction>
           dispatch({ type: 'UPDATE_CURRENT_PALETTE', payload: { palette: newPalette } });
         }}
       />
-      <h6 className="flex items-center text-neutral-400">
+      <h6 className="flex items-center text-neutral-500">
         =&nbsp;
         <span className="text-lg font-mono text-orange-400"> {palette?.numberOfShades}</span>
       </h6>
