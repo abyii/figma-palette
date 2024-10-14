@@ -14,6 +14,7 @@ const PaletteStudio: React.FC<{
       <PaletteDisplay palette={palette} />
       <PaletteMixer dispatch={dispatch} palette={palette} />
       <NofShades dispatch={dispatch} palette={palette} />
+      {/* <CurveEditor /> */}
     </div>
   );
 };
