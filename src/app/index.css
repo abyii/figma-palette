@@ -680,11 +680,10 @@ input[type="range"]::-webkit-slider-runnable-track {
 /* slider thumb */
 
 input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
-  background-color: chartreuse;
-  background: chocolate;
-  color: red;
 }
 
 .visible {
@@ -901,6 +900,10 @@ input[type="range"]::-webkit-slider-thumb {
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
 
+.bg-gradient-to-t {
+  background-image: linear-gradient(to top, var(--tw-gradient-stops));
+}
+
 .from-neutral-600 {
   --tw-gradient-from: #525252 var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(82 82 82 / 0) var(--tw-gradient-to-position);
@@ -925,6 +928,12 @@ input[type="range"]::-webkit-slider-thumb {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-stone-950 {
+  --tw-gradient-from: #0c0a09 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(12 10 9 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .to-neutral-800 {
   --tw-gradient-to: #262626 var(--tw-gradient-to-position);
 }
@@ -935,6 +944,10 @@ input[type="range"]::-webkit-slider-thumb {
 
 .to-neutral-950 {
   --tw-gradient-to: #0a0a0a var(--tw-gradient-to-position);
+}
+
+.to-stone-900 {
+  --tw-gradient-to: #1c1917 var(--tw-gradient-to-position);
 }
 
 .p-2 {
@@ -952,6 +965,11 @@ input[type="range"]::-webkit-slider-thumb {
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .px-4 {
@@ -1075,6 +1093,11 @@ input[type="range"]::-webkit-slider-thumb {
 .text-neutral-200 {
   --tw-text-opacity: 1;
   color: rgb(229 229 229 / var(--tw-text-opacity));
+}
+
+.text-neutral-300 {
+  --tw-text-opacity: 1;
+  color: rgb(212 212 212 / var(--tw-text-opacity));
 }
 
 .text-neutral-400 {

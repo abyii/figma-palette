@@ -1,6 +1,6 @@
 figma.showUI(__html__);
 
-figma.ui.resize(700, 700);
+figma.ui.resize(675, 650);
 
 type Message = {
   type: 'add-to-figma';

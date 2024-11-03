@@ -3,6 +3,8 @@ import { DispatchAction, State } from '../../types';
 import PaletteDisplay from './PaletteDisplay';
 import PaletteMixer from './PaletteMixer';
 import NofShades from './NofShades';
+import CurveEditor from './CurveEditor';
+import BottomBar from './BottomBar';
 
 const PaletteStudio: React.FC<{
   state: State;
@@ -14,7 +16,8 @@ const PaletteStudio: React.FC<{
       <PaletteDisplay palette={palette} />
       <PaletteMixer dispatch={dispatch} palette={palette} />
       <NofShades dispatch={dispatch} palette={palette} />
-      {/* <CurveEditor /> */}
+      <CurveEditor />
+      <BottomBar />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import Color from 'colorjs.io';
+import { Curve } from './Curve';
 
 export const MAX_SHADES = 16;
 export const MIN_SHADES = 3;
@@ -21,10 +22,13 @@ export class Palette {
   private _numberOfShades: number = 10;
   private _baseColorHex: string = '#000000';
   public name: string;
-  // true to css
+  // true to css values.
   public lightnessChannel: number[]; // from 0 to 1
   public chromaChannel: number[]; // from 0 to 0.4
   public hueChannel: number[]; // from 0 to 359
+  private _lightnessCurve: Curve;
+  private _chromaCurve: Curve;
+  private _hueCurve: Curve;
 
   constructor(name: string, baseColorHex: string = '#000000', numberOfShades: number = 10) {
     if (numberOfShades > MAX_SHADES) {
@@ -39,16 +43,12 @@ export class Palette {
     this.generateChannels();
   }
 
-  private generateChannels() {
-    // @ts-ignore
-    const baseColorOKLCH = new Color(this.baseColorHex).oklch;
-    this.lightnessChannel = Array.from({ length: this._numberOfShades }).map(
-      (_, i) => (0.9 / (this._numberOfShades - 1)) * i + 0.08
-    );
-    this.chromaChannel = generateBellCurve(baseColorOKLCH[1], this.numberOfShades, 0);
-    this.hueChannel = Array.from({ length: this._numberOfShades }).map(() =>
-      isNaN(baseColorOKLCH[2]) ? 0 : baseColorOKLCH[2]
-    );
+  public get baseColorHex(): string {
+    return this._baseColorHex;
+  }
+
+  public get numberOfShades(): number {
+    return this._numberOfShades;
   }
 
   set baseColorHex(newHex: string) {
@@ -68,11 +68,27 @@ export class Palette {
     this.generateChannels();
   }
 
-  public get baseColorHex(): string {
-    return this._baseColorHex;
+  set lightnessCurve(newCurve: Curve) {
+    this._lightnessCurve = newCurve;
   }
 
-  public get numberOfShades(): number {
-    return this._numberOfShades;
+  set chromaCurve(newCurve: Curve) {
+    this._chromaCurve = newCurve;
+  }
+
+  set hueCurve(newCurve: Curve) {
+    this._hueCurve = newCurve;
+  }
+
+  private generateChannels() {
+    // @ts-ignore
+    const baseColorOKLCH = new Color(this.baseColorHex).oklch;
+    this.lightnessChannel = Array.from({ length: this._numberOfShades }).map(
+      (_, i) => (0.9 / (this._numberOfShades - 1)) * i + 0.08
+    );
+    this.chromaChannel = generateBellCurve(baseColorOKLCH[1], this.numberOfShades, 0);
+    this.hueChannel = Array.from({ length: this._numberOfShades }).map(() =>
+      isNaN(baseColorOKLCH[2]) ? 0 : baseColorOKLCH[2]
+    );
   }
 }

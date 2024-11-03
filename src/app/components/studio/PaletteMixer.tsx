@@ -92,7 +92,7 @@ const PaletteMixer: React.FC<{ palette: Palette; dispatch: Dispatch<DispatchActi
                   });
                 }}
               />
-              <label htmlFor={id} className="text-sm font-semibold text-neutral-100 font-mono">
+              <label htmlFor={id} className="text-xs text-neutral-300 font-mono">
                 {valueDisplay}
               </label>
             </div>

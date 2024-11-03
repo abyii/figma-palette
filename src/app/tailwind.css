@@ -67,11 +67,10 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 /* slider thumb */
 input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
-  background-color: chartreuse;
-  background: chocolate;
-  color: red;
 }
 
 @tailwind utilities;

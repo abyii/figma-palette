@@ -12,3 +12,8 @@ export type DispatchAction =
       type: 'UPDATE_CURRENT_PALETTE';
       payload: { palette: Palette };
     };
+
+export type PresetCurve =
+  | { type: 'linear'; slope: number; yIntercept: number }
+  | { type: 'exponential'; base: number; exponent: number }
+  | { type: 'logarithmic'; base: number; coefficient: number };

@@ -39,7 +39,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <main className="w-full h-full flex flex-col bg-neutral-700 overflow-x-hidden">
+    <main className="w-full h-full flex flex-col bg-neutral-700 overflow-x-hidden text-sm">
       <Tabs state={state} dispatch={dispatch} />
       {state.selectedIndex == 'README' ? (
         <ReadMe />
