@@ -4,6 +4,14 @@ import { Curve } from './Curve';
 export const MAX_SHADES = 16;
 export const MIN_SHADES = 3;
 
+// true to css values. different from slider values.
+export const MAX_HUE = 360;
+export const MIN_HUE = 0;
+export const MAX_CHROMA = 0.4;
+export const MIN_CHROMA = 0;
+export const MAX_LIGHTNESS = 1;
+export const MIN_LIGHTNESS = 0;
+
 function generateBellCurve(maxValue: number, count: number, shift: number): number[] {
   const values: number[] = [];
   const center = Math.floor(count / 2);
@@ -18,6 +26,10 @@ function generateBellCurve(maxValue: number, count: number, shift: number): numb
   return values;
 }
 
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
 export class Palette {
   private _numberOfShades: number = 10;
   private _baseColorHex: string = '#000000';
@@ -30,16 +42,20 @@ export class Palette {
   private _chromaCurve: Curve;
   private _hueCurve: Curve;
 
-  constructor(name: string, baseColorHex: string = '#000000', numberOfShades: number = 10) {
-    if (numberOfShades > MAX_SHADES) {
-      this._numberOfShades = MAX_SHADES;
-    } else if (numberOfShades < MIN_SHADES) {
-      this._numberOfShades = MIN_SHADES;
-    } else {
-      this._numberOfShades = numberOfShades;
-    }
+  constructor(
+    name: string,
+    baseColorHex: string = '#000000',
+    numberOfShades: number = 10,
+    lightnessCurve: Curve = null,
+    chromaCurve: Curve = null,
+    hueCurve: Curve = null
+  ) {
+    this._numberOfShades = clamp(numberOfShades, MIN_SHADES, MAX_SHADES);
     this._baseColorHex = baseColorHex;
     this.name = name;
+    this._lightnessCurve = lightnessCurve;
+    this._chromaCurve = chromaCurve;
+    this._hueCurve = hueCurve;
     this.generateChannels();
   }
 
@@ -57,27 +73,23 @@ export class Palette {
   }
 
   set numberOfShades(newNumberOfShades: number) {
-    if (newNumberOfShades > MAX_SHADES) {
-      this._numberOfShades = MAX_SHADES;
-    } else if (newNumberOfShades < MIN_SHADES) {
-      this._numberOfShades = MIN_SHADES;
-    } else {
-      this._numberOfShades = newNumberOfShades;
-    }
-
+    this.numberOfShades = clamp(newNumberOfShades, MIN_SHADES, MAX_SHADES);
     this.generateChannels();
   }
 
   set lightnessCurve(newCurve: Curve) {
     this._lightnessCurve = newCurve;
+    this._generateLightnessChannel();
   }
 
   set chromaCurve(newCurve: Curve) {
     this._chromaCurve = newCurve;
+    this._generateChromaChannel();
   }
 
   set hueCurve(newCurve: Curve) {
     this._hueCurve = newCurve;
+    this._generateHueChannel();
   }
 
   private generateChannels() {
@@ -89,6 +101,24 @@ export class Palette {
     this.chromaChannel = generateBellCurve(baseColorOKLCH[1], this.numberOfShades, 0);
     this.hueChannel = Array.from({ length: this._numberOfShades }).map(() =>
       isNaN(baseColorOKLCH[2]) ? 0 : baseColorOKLCH[2]
+    );
+  }
+
+  private _generateLightnessChannel() {
+    this.lightnessChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
+      clamp(this._lightnessCurve.generateY(i), MIN_LIGHTNESS, MAX_LIGHTNESS)
+    );
+  }
+
+  private _generateChromaChannel() {
+    this.chromaChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
+      clamp(this._chromaCurve.generateY(i), MIN_CHROMA, MAX_CHROMA)
+    );
+  }
+
+  private _generateHueChannel() {
+    this.hueChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
+      clamp(this._hueCurve.generateY(i), MIN_HUE, MAX_HUE)
     );
   }
 }

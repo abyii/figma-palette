@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import { DispatchAction, State } from '../../types';
 import PaletteDisplay from './PaletteDisplay';
 import PaletteMixer from './PaletteMixer';
-import NofShades from './NofShades';
+import NofShades from './MidStrip';
 import CurveEditor from './CurveEditor';
 import BottomBar from './BottomBar';
 
