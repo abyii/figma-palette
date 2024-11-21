@@ -36,8 +36,12 @@ const MixerTabs: React.FC<{ tab: MixerTab; setTab: React.Dispatch<React.SetState
   );
 };
 
-const PaletteMixer: React.FC<{ palette: Palette; dispatch: Dispatch<DispatchAction> }> = ({ palette, dispatch }) => {
-  const [currentMixerTab, setCurrentMixerTab] = React.useState<'LUMA' | 'CHROMA' | 'HUE'>('LUMA');
+const PaletteMixer: React.FC<{
+  palette: Palette;
+  dispatch: Dispatch<DispatchAction>;
+  currentMixerTab: MixerTab;
+  setCurrentMixerTab: React.Dispatch<React.SetStateAction<MixerTab>>;
+}> = ({ palette, dispatch, currentMixerTab, setCurrentMixerTab }) => {
   const channelName =
     currentMixerTab == 'LUMA'
       ? 'lightnessChannel'

@@ -13,7 +13,4 @@ export type DispatchAction =
       payload: { palette: Palette };
     };
 
-export type PresetCurve =
-  | { type: 'linear'; slope: number; yIntercept: number }
-  | { type: 'exponential'; base: number; exponent: number }
-  | { type: 'logarithmic'; base: number; coefficient: number };
+export type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';

@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react';
-import { DispatchAction, State } from '../../types';
+import { DispatchAction, MixerTab, State } from '../../types';
 import PaletteDisplay from './PaletteDisplay';
 import PaletteMixer from './PaletteMixer';
 import NofShades from './MidStrip';
@@ -11,12 +11,19 @@ const PaletteStudio: React.FC<{
   dispatch: Dispatch<DispatchAction>;
 }> = ({ state, dispatch }) => {
   const palette = state.palettes[state.selectedIndex];
+  const [currentMixerTab, setCurrentMixerTab] = React.useState<MixerTab>('LUMA');
+
   return (
     <div className={`h-full flex flex-col bg-neutral-700`}>
       <PaletteDisplay palette={palette} />
-      <PaletteMixer dispatch={dispatch} palette={palette} />
+      <PaletteMixer
+        dispatch={dispatch}
+        palette={palette}
+        currentMixerTab={currentMixerTab}
+        setCurrentMixerTab={setCurrentMixerTab}
+      />
       <NofShades dispatch={dispatch} palette={palette} />
-      <CurveEditor />
+      <CurveEditor palette={palette} currentMixerTab={currentMixerTab} />
       <BottomBar />
     </div>
   );
