@@ -1,6 +1,5 @@
 import Color from 'colorjs.io';
 import { Curve } from './Curve';
-import { defaultPolynomial } from './presetCurves';
 
 export const MAX_SHADES = 16;
 export const MIN_SHADES = 3;
@@ -32,24 +31,24 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export class Palette {
-  private _numberOfShades: number = 10;
-  private _baseColorHex: string = '#000000';
+  private _numberOfShades: number;
+  private _baseColorHex: string;
   public name: string;
   // true to css values.
-  public lightnessChannel: number[]; // from 0 to 1
-  public chromaChannel: number[]; // from 0 to 0.4
-  public hueChannel: number[]; // from 0 to 359
+  public lightnessChannel: number[];
+  public chromaChannel: number[];
+  public hueChannel: number[];
   private _lightnessCurve: Curve;
   private _chromaCurve: Curve;
   private _hueCurve: Curve;
 
   constructor(
     name: string,
-    baseColorHex: string = '#000000',
+    baseColorHex: string,
     numberOfShades: number = 10,
-    lightnessCurve: Curve = defaultPolynomial,
-    chromaCurve: Curve = defaultPolynomial,
-    hueCurve: Curve = defaultPolynomial
+    lightnessCurve: Curve,
+    chromaCurve: Curve,
+    hueCurve: Curve
   ) {
     this._numberOfShades = clamp(numberOfShades, MIN_SHADES, MAX_SHADES);
     this._baseColorHex = baseColorHex;

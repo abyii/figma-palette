@@ -1,49 +1,68 @@
-export type Parameter = {
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-};
+export interface Parameter {
+  name: string; // Name of the parameter
+  value: number; // Current value of the parameter
+  min: number; // Minimum allowed value
+  max: number; // Maximum allowed value
+  description: string; // Description of the parameter
+}
 
 export class Curve {
   public name: string;
   public equationLatex: string;
-  public a: Parameter;
-  public b: Parameter;
-  public c: Parameter;
-  public d: Parameter;
-  public k: Parameter;
+  private _parameters: Record<string, Parameter>;
   public generateY: (x: number) => number;
-  /*
-  A Curve Object with its parameters, and output function.
-  @param name: The name of the curve
-  @param equationLatex: The SVG element of the equation
-  @param a: The Y-Multiplier parameter. also known as the Amplitude, It stretches or shrinks the curve along Y-axis.
-  @param b: The Exponent parameter. 
-  @param c: The Y-Shift parameter. also known as the Vertical Shift, It shifts the curve along Y-axis.
-  @param d: The X-Shift parameter. also known as the Horizontal Shift, It shifts the curve along X-axis.
-  @param k: The X-Multiplier parameter. also known as the Stretch, It stretches the curve along X-axis.
-  @param generateY: The function that generates the Y value for a given X value
-  @returns: A Curve Object
-  @example: new Curve('Linear', "", 1, 1, 0, 0, 1, (x: number) => x)
-  */
+
+  /**
+   * Creates a Curve with static parameter keys and an output function.
+   * @param name The name of the curve.
+   * @param equationLatex The LaTeX text of the curve's equation.
+   * @param initialParameters A Record containing parameter definitions.
+   * @param generateY The output function that computes Y for a given X.
+   */
   constructor(
     name: string,
     equationLatex: string,
-    a: Parameter,
-    b: Parameter,
-    c: Parameter,
-    d: Parameter,
-    k: Parameter,
-    generateYFactory: (curve: Curve) => (x: number) => number
+    initialParameters: Record<string, Parameter>,
+    generateY: (x: number) => number
   ) {
     this.name = name;
     this.equationLatex = equationLatex;
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.k = k;
-    this.generateY = generateYFactory(this);
+    this._parameters = initialParameters;
+    this.generateY = generateY;
+  }
+
+  /**
+   * Get a parameter by its name.
+   * @param name The name of the parameter.
+   * @returns The parameter object, or undefined if it doesn't exist.
+   */
+  getParameter(name: string): Parameter | undefined {
+    return this._parameters[name];
+  }
+
+  /**
+   * Update an existing parameter.
+   * @param name The name of the parameter.
+   * @param value The new value for the parameter.
+   */
+  setParameterValue(name: string, value: number): void {
+    const parameter = this._parameters[name];
+    if (!parameter) {
+      throw new Error(`Parameter "${name}" does not exist.`);
+    }
+
+    if (value < parameter.min || value > parameter.max) {
+      throw new Error(`Value for "${name}" is out of bounds. Must be between ${parameter.min} and ${parameter.max}.`);
+    }
+
+    this._parameters[name].value = value;
+  }
+
+  /**
+   * Get all parameters as an object.
+   * @returns The current state of all parameters.
+   */
+  getAllParameters(): Record<string, Parameter> {
+    return this._parameters;
   }
 }
