@@ -17,7 +17,7 @@ export class Curve {
   /*
   A Curve Object with its parameters, and output function.
   @param name: The name of the curve
-  @param equationSvg: The SVG element of the equation
+  @param equationLatex: The SVG element of the equation
   @param a: The Y-Multiplier parameter. also known as the Amplitude, It stretches or shrinks the curve along Y-axis.
   @param b: The Exponent parameter. 
   @param c: The Y-Shift parameter. also known as the Vertical Shift, It shifts the curve along Y-axis.
@@ -29,7 +29,7 @@ export class Curve {
   */
   constructor(
     name: string,
-    equationSvg: string,
+    equationLatex: string,
     a: Parameter,
     b: Parameter,
     c: Parameter,
@@ -38,7 +38,7 @@ export class Curve {
     generateYFactory: (curve: Curve) => (x: number) => number
   ) {
     this.name = name;
-    this.equationLatex = equationSvg;
+    this.equationLatex = equationLatex;
     this.a = a;
     this.b = b;
     this.c = c;

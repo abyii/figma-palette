@@ -1,5 +1,6 @@
 import Color from 'colorjs.io';
 import { Curve } from './Curve';
+import { defaultPolynomial } from './presetCurves';
 
 export const MAX_SHADES = 16;
 export const MIN_SHADES = 3;
@@ -7,10 +8,10 @@ export const MIN_SHADES = 3;
 // true to css values. different from slider values.
 export const MAX_HUE = 360;
 export const MIN_HUE = 0;
-export const MAX_CHROMA = 0.4;
+export const MAX_CHROMA = 0.37;
 export const MIN_CHROMA = 0;
-export const MAX_LIGHTNESS = 1;
-export const MIN_LIGHTNESS = 0;
+export const MAX_LUMINESCENCE = 1;
+export const MIN_LUMINESCENCE = 0;
 
 function generateBellCurve(maxValue: number, count: number, shift: number): number[] {
   const values: number[] = [];
@@ -46,9 +47,9 @@ export class Palette {
     name: string,
     baseColorHex: string = '#000000',
     numberOfShades: number = 10,
-    lightnessCurve: Curve = null,
-    chromaCurve: Curve = null,
-    hueCurve: Curve = null
+    lightnessCurve: Curve = defaultPolynomial,
+    chromaCurve: Curve = defaultPolynomial,
+    hueCurve: Curve = defaultPolynomial
   ) {
     this._numberOfShades = clamp(numberOfShades, MIN_SHADES, MAX_SHADES);
     this._baseColorHex = baseColorHex;
@@ -106,7 +107,7 @@ export class Palette {
 
   private _generateLightnessChannel() {
     this.lightnessChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-      clamp(this._lightnessCurve.generateY(i), MIN_LIGHTNESS, MAX_LIGHTNESS)
+      clamp(this._lightnessCurve.generateY(i), MIN_LUMINESCENCE, MAX_LUMINESCENCE)
     );
   }
 

@@ -1,5 +1,5 @@
 import React, { Dispatch } from 'react';
-import { Palette } from '../../utils';
+import { MAX_CHROMA, MAX_HUE, MAX_LUMINESCENCE, Palette } from '../../utils';
 import { DispatchAction } from '../../types';
 
 type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';
@@ -48,7 +48,7 @@ const PaletteMixer: React.FC<{
       : currentMixerTab == 'CHROMA'
       ? 'chromaChannel'
       : currentMixerTab == 'HUE' && 'hueChannel';
-  const roofValue = currentMixerTab == 'HUE' ? 359 : 100;
+  const roofValue = currentMixerTab == 'HUE' ? MAX_HUE : currentMixerTab == 'CHROMA' ? MAX_CHROMA : MAX_LUMINESCENCE;
   const floorValue = 0;
   return (
     <div className="flex flex-col w-full">
@@ -59,9 +59,9 @@ const PaletteMixer: React.FC<{
           const id = `shade${i}`;
           const value =
             currentMixerTab == 'CHROMA'
-              ? palette[channelName][i] * 250
+              ? palette[channelName][i]
               : currentMixerTab == 'LUMA'
-              ? palette[channelName][i] * 100
+              ? palette[channelName][i]
               : palette[channelName][i];
           const valueDisplay = '0'.repeat(3 - String(Math.round(value)).length) + Math.round(value);
           return (
@@ -73,6 +73,7 @@ const PaletteMixer: React.FC<{
                 type="range"
                 max={roofValue}
                 min={floorValue}
+                step={currentMixerTab == 'HUE' ? 1 : 0.01}
                 className="w-full cursor-pointer "
                 style={{
                   writingMode: 'vertical-lr',
@@ -80,15 +81,14 @@ const PaletteMixer: React.FC<{
                 }}
                 key={i}
                 id={id}
-                // normalizing 0 to 0.4 => 0 to 100 by multiplying by 250
                 value={value}
                 onChange={(e) => {
                   //   dispacth palette update
                   palette[channelName][i] =
                     currentMixerTab == 'CHROMA'
-                      ? Number(e.target.value) / 250
+                      ? Number(e.target.value)
                       : currentMixerTab == 'LUMA'
-                      ? Number(e.target.value) / 100
+                      ? Number(e.target.value)
                       : Number(e.target.value);
                   dispatch({
                     type: 'UPDATE_CURRENT_PALETTE',
