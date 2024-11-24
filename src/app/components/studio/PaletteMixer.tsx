@@ -63,7 +63,7 @@ const PaletteMixer: React.FC<{
               : currentMixerTab == 'LUMA'
               ? palette[channelName][i]
               : palette[channelName][i];
-          const valueDisplay = '0'.repeat(3 - String(Math.round(value)).length) + Math.round(value);
+          const valueDisplay = currentMixerTab == 'HUE' ? Number(value).toFixed(0) : Number(value).toFixed(2);
           return (
             <div
               key={i}

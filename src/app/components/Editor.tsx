@@ -1,7 +1,7 @@
 import React, { Dispatch, useState } from 'react';
 import { State } from '../types';
 import Button from './ui/Button';
-import { MIN_SHADES, MAX_SHADES, oklchToRgb } from '../utils';
+import { MIN_SHADES, MAX_SHADES } from '../utils';
 
 type TabName = 'lightness' | 'chroma' | 'hue';
 
@@ -129,7 +129,7 @@ const Editor = ({ state, setState }: { state: State; setState: Dispatch<State> }
             const rgbColors = [];
             const count = palette.lightnessChannel.length;
             for (let i = 0; i < count; i++) {
-              rgbColors.push(oklchToRgb(palette.lightnessChannel[i], palette.chromaChannel[i], palette.hueChannel[i]));
+              rgbColors.push((palette.lightnessChannel[i], palette.chromaChannel[i], palette.hueChannel[i]));
             }
             parent.postMessage(
               {

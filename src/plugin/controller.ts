@@ -4,7 +4,7 @@ figma.ui.resize(675, 650);
 
 type Message = {
   type: 'add-to-figma';
-  colors: [{ r: number; g: number; b: number }];
+  colors: string[];
   createVars: boolean;
   name: string;
 };
@@ -22,20 +22,11 @@ figma.ui.onmessage = (msg: Message) => {
     }
     msg.colors.forEach((c, i) => {
       const rect = figma.createRectangle();
-      rect.fills = [
-        {
-          type: 'SOLID',
-          color: {
-            r: c.r,
-            g: c.g,
-            b: c.b,
-          },
-        },
-      ];
+      rect.fills = [figma.util.solidPaint(c)];
       frame.appendChild(rect);
       if (msg.createVars) {
         const colorVariable = figma.variables.createVariable(`${msg.name}-${i * 10}`, collection.id, 'COLOR');
-        colorVariable.setValueForMode(collection.modes[0].modeId, { r: c.r, g: c.g, b: c.b });
+        colorVariable.setValueForMode(collection.modes[0].modeId, figma.util.solidPaint(c).color);
       }
     });
 

@@ -1,7 +1,6 @@
-import Color from 'colorjs.io';
+import { oklch } from 'culori/css';
 import { Curve } from './Curve';
-
-export const MAX_SHADES = 16;
+export const MAX_SHADES = 15;
 export const MIN_SHADES = 3;
 
 // true to css values. different from slider values.
@@ -11,20 +10,6 @@ export const MAX_CHROMA = 0.37;
 export const MIN_CHROMA = 0;
 export const MAX_LUMINESCENCE = 1;
 export const MIN_LUMINESCENCE = 0;
-
-function generateBellCurve(maxValue: number, count: number, shift: number): number[] {
-  const values: number[] = [];
-  const center = Math.floor(count / 2);
-
-  for (let i = 0; i < count; i++) {
-    const x = i - center + shift;
-    const exponent = (-Math.pow(x, 2) / Math.pow(center, 2)) * 2;
-    const value = maxValue * Math.exp(exponent);
-    values.push(value);
-  }
-
-  return values;
-}
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -44,19 +29,21 @@ export class Palette {
 
   constructor(
     name: string,
-    baseColorHex: string,
+    baseColorHex: string = '#000000',
     numberOfShades: number = 10,
-    lightnessCurve: Curve,
-    chromaCurve: Curve,
-    hueCurve: Curve
+    lightnessCurve: Curve = null,
+    chromaCurve: Curve = null,
+    hueCurve: Curve = null
   ) {
+    this.name = name;
     this._numberOfShades = clamp(numberOfShades, MIN_SHADES, MAX_SHADES);
     this._baseColorHex = baseColorHex;
-    this.name = name;
     this._lightnessCurve = lightnessCurve;
     this._chromaCurve = chromaCurve;
     this._hueCurve = hueCurve;
-    this.generateChannels();
+    this._generateLightnessChannel();
+    this._generateChromaChannel();
+    this._generateHueChannel();
   }
 
   public get baseColorHex(): string {
@@ -69,12 +56,16 @@ export class Palette {
 
   set baseColorHex(newHex: string) {
     this._baseColorHex = newHex;
-    this.generateChannels();
+    this._generateLightnessChannel();
+    this._generateChromaChannel();
+    this._generateHueChannel();
   }
 
   set numberOfShades(newNumberOfShades: number) {
-    this.numberOfShades = clamp(newNumberOfShades, MIN_SHADES, MAX_SHADES);
-    this.generateChannels();
+    this._numberOfShades = clamp(newNumberOfShades, MIN_SHADES, MAX_SHADES);
+    this._generateLightnessChannel();
+    this._generateChromaChannel();
+    this._generateHueChannel();
   }
 
   set lightnessCurve(newCurve: Curve) {
@@ -92,33 +83,41 @@ export class Palette {
     this._generateHueChannel();
   }
 
-  private generateChannels() {
-    // @ts-ignore
-    const baseColorOKLCH = new Color(this.baseColorHex).oklch;
-    this.lightnessChannel = Array.from({ length: this._numberOfShades }).map(
-      (_, i) => (0.9 / (this._numberOfShades - 1)) * i + 0.08
-    );
-    this.chromaChannel = generateBellCurve(baseColorOKLCH[1], this.numberOfShades, 0);
-    this.hueChannel = Array.from({ length: this._numberOfShades }).map(() =>
-      isNaN(baseColorOKLCH[2]) ? 0 : baseColorOKLCH[2]
-    );
-  }
-
   private _generateLightnessChannel() {
-    this.lightnessChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-      clamp(this._lightnessCurve.generateY(i), MIN_LUMINESCENCE, MAX_LUMINESCENCE)
-    );
+    if (this._lightnessCurve) {
+      this.lightnessChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
+        clamp(this._lightnessCurve.generateY(i), MIN_LUMINESCENCE, MAX_LUMINESCENCE)
+      );
+    } else {
+      this.lightnessChannel = Array.from({ length: this._numberOfShades }).map(
+        (_, i) => (0.9 / (this._numberOfShades - 1)) * i + 0.08
+      );
+    }
   }
 
   private _generateChromaChannel() {
-    this.chromaChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-      clamp(this._chromaCurve.generateY(i), MIN_CHROMA, MAX_CHROMA)
-    );
+    if (this._chromaCurve) {
+      this.chromaChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
+        clamp(this._chromaCurve.generateY(i), MIN_CHROMA, MAX_CHROMA)
+      );
+    } else {
+      // generating normal distribution
+      this.chromaChannel = Array.from({ length: this._numberOfShades }).map((_, i) => {
+        const center = Math.floor(this._numberOfShades / 2);
+        const x = i - center;
+        const exponent = (-Math.pow(x, 2) / Math.pow(center, 2)) * 2;
+        return oklch(this._baseColorHex)?.c * Math.exp(exponent);
+      });
+    }
   }
 
   private _generateHueChannel() {
-    this.hueChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-      clamp(this._hueCurve.generateY(i), MIN_HUE, MAX_HUE)
-    );
+    if (this._hueCurve) {
+      this.hueChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
+        clamp(this._hueCurve.generateY(i), MIN_HUE, MAX_HUE)
+      );
+    } else {
+      this.hueChannel = Array.from({ length: this._numberOfShades }).map(() => oklch(this._baseColorHex).h || 0);
+    }
   }
 }
