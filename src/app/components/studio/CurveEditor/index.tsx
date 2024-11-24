@@ -1,5 +1,5 @@
 import React from 'react';
-import { Palette } from '../../../utils/Palette';
+import { Palette } from '../../../entities/Palette';
 import { MixerTab } from '../../../types';
 
 const getCurveName = (currentMixerTab: MixerTab) => {

@@ -4,7 +4,7 @@ import { State, DispatchAction } from './types';
 import { MAX_PALETTES, Palette } from './utils';
 import Tabs from './components/Tabs';
 import ReadMe from './components/ReadMe';
-import { dravidianAlphas } from './utils/IndoAryanAlphas';
+import { dravidianAlphas } from './entities/IndoAryanAlphas';
 import PaletteStudio from './components/studio';
 
 const initialState: State = {
