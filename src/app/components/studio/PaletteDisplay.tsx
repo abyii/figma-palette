@@ -1,5 +1,5 @@
 import React from 'react';
-import { Palette } from '../../utils';
+import { Palette } from '../../entities/Palette';
 
 const PaletteDisplay: React.FC<{ palette: Palette }> = ({ palette }) => {
   return (

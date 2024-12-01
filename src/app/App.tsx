@@ -1,7 +1,8 @@
 import './index.css';
 import React, { useReducer } from 'react';
 import { State, DispatchAction } from './types';
-import { MAX_PALETTES, Palette } from './utils';
+import { MAX_PALETTES } from './config';
+import { Palette } from './entities/Palette';
 import Tabs from './components/Tabs';
 import ReadMe from './components/ReadMe';
 import { dravidianAlphas } from './entities/IndoAryanAlphas';
@@ -27,7 +28,7 @@ function reducer(state: State, action: DispatchAction): State {
         selectedIndex: action.payload,
       };
     case 'UPDATE_CURRENT_PALETTE':
-      const newState = structuredClone(state);
+      const newState: State = { selectedIndex: state.selectedIndex, palettes: state.palettes };
       newState.palettes[newState.selectedIndex] = action.payload.palette;
       return newState;
     default:

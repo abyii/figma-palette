@@ -1,4 +1,4 @@
-import { Palette } from '../utils';
+import { Palette } from '../entities/Palette';
 
 export type State = {
   palettes: Palette[];

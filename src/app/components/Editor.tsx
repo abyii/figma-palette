@@ -1,7 +1,7 @@
 import React, { Dispatch, useState } from 'react';
 import { State } from '../types';
 import Button from './ui/Button';
-import { MIN_SHADES, MAX_SHADES } from '../utils';
+import { MIN_SHADES, MAX_SHADES } from '../config';
 
 type TabName = 'lightness' | 'chroma' | 'hue';
 

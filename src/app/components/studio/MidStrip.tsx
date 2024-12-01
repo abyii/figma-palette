@@ -1,5 +1,6 @@
 import React, { Dispatch } from 'react';
-import { MAX_SHADES, MIN_SHADES, Palette } from '../../utils';
+import { MAX_SHADES, MIN_SHADES } from '../../config';
+import { Palette } from '../../entities/Palette';
 import { DispatchAction } from '../../types';
 
 const NofShades: React.FC<{ palette: Palette; dispatch: Dispatch<DispatchAction> }> = ({ palette, dispatch }) => {

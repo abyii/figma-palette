@@ -1,64 +1,35 @@
-export interface Parameter {
-  value: number; // Current value of the parameter
-  min: number; // Minimum allowed value
-  max: number; // Maximum allowed value
-  step: number; // increment or decrement step units
-  description: string; // Description of the parameter
-}
+import { MixerTab } from '../types';
+import { Palette } from './Palette';
+import { Parameter } from './Parameter';
+import { PresetCurveKey } from './presetCurves';
 
 export class Curve {
+  public name: PresetCurveKey;
   public equationLatex: string;
-  private _parameters: Record<string, Parameter>;
+  public parameters: Record<string, Parameter>;
   public generateY: (x: number) => number;
+  public generateAndSetParams: (palette: Palette, mode: MixerTab) => void;
 
   /**
    * Creates a Curve with static parameter keys and an output function.
-   * @param equationLatex The LaTeX text of the curve's equation.
-   * @param initialParameters A Record containing parameter definitions.
-   * @param generateYFactory The output function that computes Y for a given X.
+   * @param name The name of the curve.
+   * @param equationLatex The LaTeX equation for the curve.
+   * @param generateY The function that generates the y value for a given x.
+   * @param generateAndSetParams The function that generates the parameters for the curve.
+   * @param palette The palette object to generate parameters from.
    */
   constructor(
+    name: PresetCurveKey,
     equationLatex: string,
-    initialParameters: Record<string, Parameter>,
-    generateYFactory: (curve: Curve) => (x: number) => number
+    palette: Palette,
+    mode: MixerTab,
+    generateAndSetParams: (palette: Palette, mode: MixerTab) => void,
+    generateY: (x: number) => number
   ) {
+    this.name = name;
     this.equationLatex = equationLatex;
-    this._parameters = initialParameters;
-    this.generateY = generateYFactory(this);
-  }
-
-  /**
-   * Get a parameter by its name.
-   * @param key The key of the parameter.
-   * @returns The parameter object, or undefined if it doesn't exist.
-   */
-  getParameter(key: string): Parameter | undefined {
-    return this._parameters[key];
-  }
-
-  /**
-   * Update an existing parameter.
-   * @param key The key of the parameter.
-   * @param value The new value for the parameter.
-   */
-  setParameterValue(key: string, value: number): void {
-    const parameter = this._parameters[key];
-    if (!parameter) {
-      throw new Error(`Parameter "${key}" does not exist.`);
-    }
-
-    if (value < parameter.min || value > parameter.max) {
-      throw new Error(`Value for "${key}" is out of bounds. Must be between ${parameter.min} and ${parameter.max}.`);
-    }
-
-    this._parameters[key].value = value;
-  }
-
-  /**
-   * Get all parameters as an object.
-   * @returns The current state of all parameters.
-   */
-  getAllParameters(): Record<string, Parameter> {
-    return this._parameters;
+    this.generateAndSetParams = generateAndSetParams.bind(this);
+    this.generateAndSetParams(palette, mode);
+    this.generateY = generateY.bind(this);
   }
 }

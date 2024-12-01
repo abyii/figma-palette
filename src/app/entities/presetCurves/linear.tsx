@@ -1,37 +1,40 @@
+import { MAX_CHROMA, MAX_HUE, MAX_LUMINESCENCE } from '../../config';
 import { MixerTab } from '../../types';
 import { Curve } from '../Curve';
-import { getProportionalValue, getYRange, NumberOfSteps } from './util';
+import { Palette } from '../Palette';
+import { Parameter } from '../Parameter';
 
-export function linear(numberOfShades: number, tab: MixerTab, previousCurve: Curve = null): Curve {
+export function getLinearCurve(palette: Palette, mode: MixerTab) {
   return new Curve(
-    'y=mx+c',
-    {
-      m: {
-        value: previousCurve
-          ? getProportionalValue(
-              previousCurve.getParameter('m').value,
-              2 * previousCurve.getParameter('m').min,
-              2 * previousCurve.getParameter('m').max,
-              2 * Math.floor(numberOfShades / 3),
-              -Math.floor(numberOfShades / 3)
-            )
-          : getYRange(tab) / numberOfShades,
-        min: -Math.floor(numberOfShades / 3),
-        max: Math.floor(numberOfShades / 3),
-        step: Math.floor((2 * Math.floor(numberOfShades / 3)) / NumberOfSteps),
-        description: 'Slope of the line.',
-      },
-      c: {
-        value: 0,
-        min: -Math.floor(numberOfShades / 3),
-        max: Math.floor(numberOfShades / 3),
-        step: Math.floor((2 * Math.floor(numberOfShades / 3)) / NumberOfSteps),
-        description: 'Lift or drop the line.',
-      },
+    'Linear',
+    'y = mx + c',
+    palette,
+    mode,
+    function (palette: Palette, mode: MixerTab) {
+      const xrange = Math.max(palette.numberOfShades - 3, 3);
+      const minM =
+        mode == 'LUMA'
+          ? -MAX_LUMINESCENCE / xrange
+          : mode == 'CHROMA'
+          ? -MAX_CHROMA / xrange
+          : mode == 'HUE' && -MAX_HUE / xrange;
+      const maxM =
+        mode == 'LUMA'
+          ? MAX_LUMINESCENCE / xrange
+          : mode == 'CHROMA'
+          ? MAX_CHROMA / xrange
+          : mode == 'HUE' && MAX_HUE / xrange;
+      const minC = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
+      const maxC = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
+      this.parameters = {
+        m: new Parameter('m', minM, maxM, (maxM - minM) / 100, 0.5, 'Slope of the Line.'),
+        c: new Parameter('c', minC, maxC, (maxC - minC) / 100, 0.5, 'Lift or drop the Line.'),
+      };
     },
-    (curve) => (x) => {
-      const params = curve.getAllParameters();
-      return params.m.value * x + params.c.value;
+    function (x: number) {
+      const m = this.parameters['m'].value;
+      const c = this.parameters['c'].value;
+      return m * x + c;
     }
   );
 }

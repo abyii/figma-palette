@@ -1,6 +1,6 @@
 import React from 'react';
 import { DispatchAction, State } from '../types';
-import { MAX_PALETTES } from '../utils';
+import { MAX_PALETTES } from '../config';
 import { CompareIcon, PlusIcon, ReadmeIcon } from './icons';
 
 const TabButton: React.FC<{

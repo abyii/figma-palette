@@ -1,6 +1,5 @@
 import { oklch } from 'culori/css';
 import { Curve } from './Curve';
-import { SelectedCurveKey } from './presetCurves';
 import {
   MAX_CHROMA,
   MAX_HUE,
@@ -24,27 +23,24 @@ export class Palette {
   public lightnessChannel: number[];
   public chromaChannel: number[];
   public hueChannel: number[];
-  private _lightnessCurves: Record<SelectedCurveKey, Curve>;
-  private _chromaCurves: Record<SelectedCurveKey, Curve>;
-  private _hueCurves: Record<SelectedCurveKey, Curve>;
-  private _selectedLightnessCurve: SelectedCurveKey;
-  private _selectedChromaCurve: SelectedCurveKey;
-  private _selectedHueCurve: SelectedCurveKey;
+  private _lightnessCurve: Curve;
+  private _chromaCurve: Curve;
+  private _hueCurve: Curve;
 
   constructor(
     name: string,
     baseColorHex: string = '#000000',
     numberOfShades: number = 10,
-    lightnessCurve: SelectedCurveKey = null,
-    chromaCurve: SelectedCurveKey = null,
-    hueCurve: SelectedCurveKey = null
+    lightnessCurve: Curve = null,
+    chromaCurve: Curve = null,
+    hueCurve: Curve = null
   ) {
     this.name = name;
     this._numberOfShades = clamp(numberOfShades, MIN_SHADES, MAX_SHADES);
     this._baseColorHex = baseColorHex;
-    this._selectedLightnessCurve = lightnessCurve;
-    this._selectedChromaCurve = chromaCurve;
-    this._selectedHueCurve = hueCurve;
+    this._lightnessCurve = lightnessCurve;
+    this._chromaCurve = chromaCurve;
+    this._hueCurve = hueCurve;
     this._generateLightnessChannel();
     this._generateChromaChannel();
     this._generateHueChannel();
@@ -58,28 +54,16 @@ export class Palette {
     return this._numberOfShades;
   }
 
-  public get lightnessCurves(): Record<SelectedCurveKey, Curve> {
-    return this._lightnessCurves;
+  public get lightnessCurve(): Curve {
+    return this._lightnessCurve;
   }
 
-  public get chromaCurves(): Record<SelectedCurveKey, Curve> {
-    return this._chromaCurves;
+  public get chromaCurve(): Curve {
+    return this._chromaCurve;
   }
 
-  public get hueCurves(): Record<SelectedCurveKey, Curve> {
-    return this._hueCurves;
-  }
-
-  public get selectedLightnessCurve(): SelectedCurveKey {
-    return this._selectedLightnessCurve;
-  }
-
-  public get selectedChromaCurve(): SelectedCurveKey {
-    return this._selectedChromaCurve;
-  }
-
-  public get selectedHueCurve(): SelectedCurveKey {
-    return this._selectedHueCurve;
+  public get hueCurve(): Curve {
+    return this._hueCurve;
   }
 
   set baseColorHex(newHex: string) {
@@ -91,30 +75,33 @@ export class Palette {
 
   set numberOfShades(newNumberOfShades: number) {
     this._numberOfShades = clamp(newNumberOfShades, MIN_SHADES, MAX_SHADES);
+    this._lightnessCurve.generateAndSetParams(this, 'LUMA');
+    this._chromaCurve.generateAndSetParams(this, 'CHROMA');
+    this._hueCurve.generateAndSetParams(this, 'HUE');
     this._generateLightnessChannel();
     this._generateChromaChannel();
     this._generateHueChannel();
   }
 
-  set selectedLightnessCurve(newCurve: SelectedCurveKey) {
-    this._selectedLightnessCurve = newCurve;
+  set lightnessCurve(newCurve: Curve) {
+    this._lightnessCurve = newCurve;
     this._generateLightnessChannel();
   }
 
-  set selectedChromaCurve(newCurve: SelectedCurveKey) {
-    this._selectedChromaCurve = newCurve;
+  set chromaCurve(newCurve: Curve) {
+    this._chromaCurve = newCurve;
     this._generateChromaChannel();
   }
 
-  set selectedHueCurve(newCurve: SelectedCurveKey) {
-    this._selectedHueCurve = newCurve;
+  set hueCurve(newCurve: Curve) {
+    this._hueCurve = newCurve;
     this._generateHueChannel();
   }
 
   private _generateLightnessChannel() {
-    if (this._lightnessCurves) {
+    if (this._lightnessCurve) {
       this.lightnessChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-        clamp(this._lightnessCurves[this._selectedLightnessCurve].generateY(i), MIN_LUMINESCENCE, MAX_LUMINESCENCE)
+        clamp(this._lightnessCurve.generateY(i), MIN_LUMINESCENCE, MAX_LUMINESCENCE)
       );
     } else {
       this.lightnessChannel = Array.from({ length: this._numberOfShades }).map(
@@ -124,9 +111,9 @@ export class Palette {
   }
 
   private _generateChromaChannel() {
-    if (this._chromaCurves) {
+    if (this._chromaCurve) {
       this.chromaChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-        clamp(this._chromaCurves[this._selectedChromaCurve].generateY(i), MIN_CHROMA, MAX_CHROMA)
+        clamp(this._chromaCurve.generateY(i), MIN_CHROMA, MAX_CHROMA)
       );
     } else {
       // generating normal distribution
@@ -140,9 +127,9 @@ export class Palette {
   }
 
   private _generateHueChannel() {
-    if (this._hueCurves) {
+    if (this._hueCurve) {
       this.hueChannel = Array.from({ length: this._numberOfShades }).map((_, i) =>
-        clamp(this._hueCurves[this._selectedHueCurve].generateY(i), MIN_HUE, MAX_HUE)
+        clamp(this._hueCurve.generateY(i), MIN_HUE, MAX_HUE)
       );
     } else {
       this.hueChannel = Array.from({ length: this._numberOfShades }).map(() => oklch(this._baseColorHex).h || 0);

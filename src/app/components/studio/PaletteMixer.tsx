@@ -1,5 +1,6 @@
 import React, { Dispatch } from 'react';
-import { MAX_CHROMA, MAX_HUE, MAX_LUMINESCENCE, Palette } from '../../utils';
+import { MAX_CHROMA, MAX_HUE, MAX_LUMINESCENCE } from '../../config';
+import { Palette } from '../../entities/Palette';
 import { DispatchAction } from '../../types';
 
 type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';

@@ -23,7 +23,7 @@ const PaletteStudio: React.FC<{
         setCurrentMixerTab={setCurrentMixerTab}
       />
       <NofShades dispatch={dispatch} palette={palette} />
-      <CurveEditor palette={palette} currentMixerTab={currentMixerTab} />
+      <CurveEditor palette={palette} currentMixerTab={currentMixerTab} dispatch={dispatch} />
       <BottomBar />
     </div>
   );
