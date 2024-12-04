@@ -55,7 +55,7 @@ const PaletteMixer: React.FC<{
     <div className="flex flex-col w-full">
       <MixerTabs tab={currentMixerTab} setTab={setCurrentMixerTab} />
 
-      <div className="flex w-full p-3 bg-gradient-to-b from-neutral-600 to bg-neutral-700">
+      <div className="flex w-full p-3 bg-gradient-to-b from-neutral-600 to-neutral-700">
         {Array.from({ length: palette.numberOfShades }).map((_, i) => {
           const id = `shade${i}`;
           const value =

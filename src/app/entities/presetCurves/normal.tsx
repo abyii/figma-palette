@@ -7,17 +7,17 @@ import { Parameter } from '../Parameter';
 export function getNormalCurve(palette: Palette, mode: MixerTab) {
   return new Curve(
     'Normal',
-    `y = ae^{-\left(kx-d\right)^{2}}+c`,
+    `y = ae^{-(kx-d)^{2}}+c`,
     palette,
     mode,
     function (palette: Palette, mode: MixerTab) {
       const xrange = palette.numberOfShades;
       const minA = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
-      const maxA = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
+      const maxA = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
       const minK = 0;
       const maxK = 4;
       const minD = -1;
-      const maxD = xrange + 1;
+      const maxD = xrange / 2 + 1;
       const minC = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
       const maxC = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
       this.parameters = {

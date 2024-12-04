@@ -37,7 +37,7 @@ export class Parameter {
 
   public set value(newValue: number) {
     if (newValue < this.min || newValue > this.max) {
-      throw new Error(`Value is out of bounds. Must be between ${this.min} and ${this.max}.`);
+      return;
     }
     this._relativeValue = (newValue - this.min) / (this.max - this.min);
   }

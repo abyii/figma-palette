@@ -75,9 +75,9 @@ export class Palette {
 
   set numberOfShades(newNumberOfShades: number) {
     this._numberOfShades = clamp(newNumberOfShades, MIN_SHADES, MAX_SHADES);
-    this._lightnessCurve.generateAndSetParams(this, 'LUMA');
-    this._chromaCurve.generateAndSetParams(this, 'CHROMA');
-    this._hueCurve.generateAndSetParams(this, 'HUE');
+    this._lightnessCurve?.generateAndSetParams(this, 'LUMA');
+    this._chromaCurve?.generateAndSetParams(this, 'CHROMA');
+    this._hueCurve?.generateAndSetParams(this, 'HUE');
     this._generateLightnessChannel();
     this._generateChromaChannel();
     this._generateHueChannel();
