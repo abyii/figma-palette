@@ -1,4 +1,4 @@
-import { MixerTab } from '../../../types';
+import { MixerTab } from '../../types';
 
 export const getCurveKey = (currentMixerTab: MixerTab) => {
   switch (currentMixerTab) {

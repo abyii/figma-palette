@@ -4,7 +4,7 @@ import { Curve } from '../Curve';
 import { Palette } from '../Palette';
 import { Parameter } from '../Parameter';
 
-export function getNormalCurve(palette: Palette, mode: MixerTab) {
+export function getSineCurve(palette: Palette, mode: MixerTab) {
   return new Curve(
     'Normal',
     `y = ae^{-(kx-d)^{2}}+c`,

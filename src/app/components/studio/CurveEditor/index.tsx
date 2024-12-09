@@ -3,7 +3,7 @@ import { Palette } from '../../../entities/Palette';
 import { DispatchAction, MixerTab } from '../../../types';
 import { Parameter } from '../../../entities/Parameter';
 import { CurveSelector } from './CurveSelector';
-import { FxBox } from './fxBox';
+import { FxBox } from './FxBox';
 import { CurveMixer } from './CurveMixer';
 
 const CurveEditor: React.FC<{
@@ -18,6 +18,7 @@ const CurveEditor: React.FC<{
       <FxBox palette={palette} currentMixerTab={currentMixerTab} selectedParam={selectedParam} />
       <CurveMixer
         palette={palette}
+        selectedParam={selectedParam}
         setSelectedParam={setSelectedParam}
         currentMixerTab={currentMixerTab}
         dispatch={dispatch}

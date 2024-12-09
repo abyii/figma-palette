@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { Palette } from '../../../entities/Palette';
 import { Parameter } from '../../../entities/Parameter';
 import { MixerTab } from '../../../types';
-import { getCurveKey } from './utils';
+import { getCurveKey } from '../utils';
 
 export const FxBox: React.FC<{
   palette: Palette;
@@ -19,6 +19,20 @@ export const FxBox: React.FC<{
       </MathJaxContext>
     );
   }, [palette?.[curveKey]?.equationLatex]);
+
+  useEffect(() => {
+    const symbol = selectedParam ? selectedParam?.symbol : 'null';
+    const highlightClass = 'text-emerald-400';
+    const equationLetters = document.getElementsByTagName('mjx-c');
+    Array.from(equationLetters).forEach((letter) => {
+      const computedStyle = window.getComputedStyle(letter, '::before');
+      if (computedStyle.content == `"${symbol}"`) {
+        letter.classList.add(highlightClass);
+      } else {
+        letter.classList.remove(highlightClass);
+      }
+    });
+  }, [selectedParam, palette?.[curveKey]?.equationLatex]);
   return (
     <div className="w-full h-full flex relative flex-col aspect-square p-4 bg-gradient-to-t from-neutral-900 to-neutral-800 max-w-[30%]">
       <span className={`font-serif  italic text-xl ${palette[curveKey] ? 'text-emerald-400' : 'text-neutral-700'}`}>

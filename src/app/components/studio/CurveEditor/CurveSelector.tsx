@@ -3,7 +3,7 @@ import { Curve } from '../../../entities/Curve';
 import { Palette } from '../../../entities/Palette';
 import { PresetCurveKey, presetCurves } from '../../../entities/presetCurves';
 import { DispatchAction, MixerTab } from '../../../types';
-import { getCurveKey } from './utils';
+import { getCurveKey } from '../utils';
 
 export const CurveSelector: React.FC<{
   palette: Palette;

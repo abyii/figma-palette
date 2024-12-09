@@ -27,7 +27,7 @@ export function getLinearCurve(palette: Palette, mode: MixerTab) {
       const minC = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
       const maxC = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
       this.parameters = {
-        m: new Parameter('m', minM, maxM, (maxM - minM) / 100, 0.5, 'Slope of the Line.'),
+        m: new Parameter('m', minM, maxM, (maxM - minM) / 100, 0.9, 'Slope of the Line.'),
         c: new Parameter('c', minC, maxC, (maxC - minC) / 100, 0.5, 'Lift or drop the Line.'),
       };
     },

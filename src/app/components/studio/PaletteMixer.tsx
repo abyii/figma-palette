@@ -2,13 +2,15 @@ import React, { Dispatch } from 'react';
 import { MAX_CHROMA, MAX_HUE, MAX_LUMINESCENCE } from '../../config';
 import { Palette } from '../../entities/Palette';
 import { DispatchAction } from '../../types';
+import { getCurveKey } from './utils';
 
 type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';
 
-const MixerTabButton: React.FC<{ label: string; onClick: () => void; highlighted: boolean }> = ({
+const MixerTabButton: React.FC<{ label: string; onClick: () => void; highlighted: boolean; fxHighlight: boolean }> = ({
   label,
   onClick,
   highlighted,
+  fxHighlight,
 }) => {
   return (
     <button
@@ -19,20 +21,44 @@ const MixerTabButton: React.FC<{ label: string; onClick: () => void; highlighted
       }`}
       onClick={onClick}
     >
-      {label}
+      <span className="relative">
+        {label}
+
+        {fxHighlight ? (
+          <span className="absolute -left-8 font-serif italic font-semibold w-5 h-5 text-sm text-neutral-300/50">
+            fx
+          </span>
+        ) : null}
+      </span>
     </button>
   );
 };
 
-const MixerTabs: React.FC<{ tab: MixerTab; setTab: React.Dispatch<React.SetStateAction<MixerTab>> }> = ({
-  tab,
-  setTab,
-}) => {
+const MixerTabs: React.FC<{
+  tab: MixerTab;
+  setTab: React.Dispatch<React.SetStateAction<MixerTab>>;
+  palette: Palette;
+}> = ({ tab, setTab, palette }) => {
   return (
     <div className="flex w-full">
-      <MixerTabButton label="Luminescence" onClick={() => setTab('LUMA')} highlighted={tab === 'LUMA'} />
-      <MixerTabButton label="Chroma" onClick={() => setTab('CHROMA')} highlighted={tab === 'CHROMA'} />
-      <MixerTabButton label="Hue" onClick={() => setTab('HUE')} highlighted={tab === 'HUE'} />
+      <MixerTabButton
+        fxHighlight={!!palette?.[getCurveKey('LUMA')]}
+        label="Luminescence"
+        onClick={() => setTab('LUMA')}
+        highlighted={tab === 'LUMA'}
+      />
+      <MixerTabButton
+        fxHighlight={!!palette?.[getCurveKey('CHROMA')]}
+        label="Chroma"
+        onClick={() => setTab('CHROMA')}
+        highlighted={tab === 'CHROMA'}
+      />
+      <MixerTabButton
+        fxHighlight={!!palette?.[getCurveKey('HUE')]}
+        label="Hue"
+        onClick={() => setTab('HUE')}
+        highlighted={tab === 'HUE'}
+      />
     </div>
   );
 };
@@ -53,7 +79,7 @@ const PaletteMixer: React.FC<{
   const floorValue = 0;
   return (
     <div className="flex flex-col w-full">
-      <MixerTabs tab={currentMixerTab} setTab={setCurrentMixerTab} />
+      <MixerTabs palette={palette} tab={currentMixerTab} setTab={setCurrentMixerTab} />
 
       <div className="flex w-full p-3 bg-gradient-to-b from-neutral-600 to-neutral-700">
         {Array.from({ length: palette.numberOfShades }).map((_, i) => {
@@ -85,6 +111,9 @@ const PaletteMixer: React.FC<{
                 value={value}
                 onChange={(e) => {
                   //   dispacth palette update
+                  if (palette?.[getCurveKey(currentMixerTab)]) {
+                    palette[getCurveKey(currentMixerTab)] = null;
+                  }
                   palette[channelName][i] =
                     currentMixerTab == 'CHROMA'
                       ? Number(e.target.value)

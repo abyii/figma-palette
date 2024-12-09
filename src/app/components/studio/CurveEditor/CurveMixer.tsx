@@ -2,14 +2,15 @@ import React from 'react';
 import { Palette } from '../../../entities/Palette';
 import { Parameter } from '../../../entities/Parameter';
 import { DispatchAction, MixerTab } from '../../../types';
-import { getCurveKey } from './utils';
+import { getCurveKey } from '../utils';
 
 export const CurveMixer: React.FC<{
   palette: Palette;
   currentMixerTab: MixerTab;
   dispatch: React.Dispatch<DispatchAction>;
+  selectedParam: Parameter;
   setSelectedParam: React.Dispatch<React.SetStateAction<Parameter>>;
-}> = ({ palette, currentMixerTab, dispatch, setSelectedParam }) => {
+}> = ({ palette, currentMixerTab, dispatch, selectedParam, setSelectedParam }) => {
   const curveKey = getCurveKey(currentMixerTab);
   const curve = palette?.[curveKey];
 
@@ -29,7 +30,17 @@ export const CurveMixer: React.FC<{
           onMouseEnter={() => setSelectedParam(curve?.parameters?.[k])}
           onMouseLeave={() => setSelectedParam(null)}
         >
-          <span className="text-emerald-400 text-lg italic font-serif font-medium w-4">{k}</span>
+          <span
+            className={`text-emerald-400 text-lg italic font-serif font-medium transition-colors duration-200 w-4 ${
+              selectedParam?.symbol == k
+                ? 'text-emerald-300'
+                : selectedParam
+                ? 'text-neutral-400/80'
+                : 'text-emerald-400'
+            }`}
+          >
+            {k}
+          </span>
           <input
             type="range"
             className="flex-1 bg-black"
