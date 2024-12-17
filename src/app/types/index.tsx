@@ -11,6 +11,9 @@ export type DispatchAction =
   | {
       type: 'UPDATE_CURRENT_PALETTE';
       payload: { palette: Palette };
+    }
+  | {
+      type: 'DELETE_CURRENT_PALETTE';
     };
 
 export type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';

@@ -15,7 +15,9 @@ export const FxBox: React.FC<{
     if (!palette?.[curveKey]?.equationLatex) return null;
     return (
       <MathJaxContext>
-        <MathJax className="text-lg text-neutral-300">{`$$${palette?.[curveKey]?.equationLatex}$$`}</MathJax>
+        <MathJax
+          className={`${palette?.[curveKey]?.className} text-neutral-300`}
+        >{`$$${palette?.[curveKey]?.equationLatex}$$`}</MathJax>
       </MathJaxContext>
     );
   }, [palette?.[curveKey]?.equationLatex]);

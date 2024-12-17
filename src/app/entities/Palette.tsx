@@ -85,17 +85,17 @@ export class Palette {
 
   set lightnessCurve(newCurve: Curve) {
     this._lightnessCurve = newCurve;
-    this._generateLightnessChannel();
+    if (this._lightnessCurve) this._generateLightnessChannel();
   }
 
   set chromaCurve(newCurve: Curve) {
     this._chromaCurve = newCurve;
-    this._generateChromaChannel();
+    if (this._chromaCurve) this._generateChromaChannel();
   }
 
   set hueCurve(newCurve: Curve) {
     this._hueCurve = newCurve;
-    this._generateHueChannel();
+    if (this._hueCurve) this._generateHueChannel();
   }
 
   private _generateLightnessChannel() {

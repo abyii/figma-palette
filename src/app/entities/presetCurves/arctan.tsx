@@ -4,30 +4,30 @@ import { Curve } from '../Curve';
 import { Palette } from '../Palette';
 import { Parameter } from '../Parameter';
 
-export function getSineCurve(palette: Palette, mode: MixerTab) {
+export function getArcTanCurve(palette: Palette, mode: MixerTab) {
   return new Curve(
-    'Sine',
-    'y=asin(kx-d)+c',
-    'text-base',
+    'Arctan',
+    'y=b tan^{-1}(kx-d)+c',
+    'text-sm',
     palette,
     mode,
     function (palette: Palette, mode: MixerTab) {
       const xrange = palette.numberOfShades;
-      const minA = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
-      const maxA = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
+      const minB = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
+      const maxB = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
       const minK = 0;
-      const maxK = 3;
-      const minD = -xrange / 2;
-      const maxD = -minD;
-      const minC = mode == 'LUMA' ? -MAX_LUMINESCENCE : mode == 'CHROMA' ? -MAX_CHROMA : mode == 'HUE' && -MAX_HUE;
+      const maxK = 1;
+      const minD = -xrange / 6;
+      const maxD = xrange / 3;
+      const minC = 0;
       const maxC = mode == 'LUMA' ? MAX_LUMINESCENCE : mode == 'CHROMA' ? MAX_CHROMA : mode == 'HUE' && MAX_HUE;
       this.parameters = {
-        a: new Parameter(
-          'a',
-          minA,
-          maxA,
-          (maxA - minA) / 100,
-          0.75,
+        b: new Parameter(
+          'b',
+          minB,
+          maxB,
+          (maxB - minB) / 100,
+          0.72,
           'Y-multiplier. Controls the amplitude of the Curve.'
         ),
         k: new Parameter(
@@ -35,19 +35,19 @@ export function getSineCurve(palette: Palette, mode: MixerTab) {
           minK,
           maxK,
           (maxK - minK) / 100,
-          0.2,
+          0.4,
           'X-mulltiplier. Shrink or Expand the curve horizontally.'
         ),
-        d: new Parameter('d', minD, maxD, (maxD - minD) / 100, 0.5, 'Shift the curve to left or right.'),
-        c: new Parameter('c', minC, maxC, (maxC - minC) / 100, 0.75, 'Lift or drop the Curve.'),
+        d: new Parameter('d', minD, maxD, (maxD - minD) / 100, 0.65, 'Shift the curve to left or right.'),
+        c: new Parameter('c', minC, maxC, (maxC - minC) / 100, 0.5, 'Lift or drop the Curve.'),
       };
     },
     function (x: number) {
-      const a = this.parameters['a'].value;
+      const b = this.parameters['b'].value;
       const k = this.parameters['k'].value;
       const d = this.parameters['d'].value;
       const c = this.parameters['c'].value;
-      return a * Math.sin(k * x - d) + c;
+      return b * Math.atan(k * x - d) + c;
     }
   );
 }

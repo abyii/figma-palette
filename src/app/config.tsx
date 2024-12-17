@@ -1,6 +1,6 @@
-import { dravidianAlphas } from './entities/IndoAryanAlphas';
+import { paletteAlphas } from './entities/paletteAlphas';
 
-export const MAX_PALETTES = dravidianAlphas.length;
+export const MAX_PALETTES = paletteAlphas.length;
 
 export const MAX_SHADES = 15;
 export const MIN_SHADES = 3;

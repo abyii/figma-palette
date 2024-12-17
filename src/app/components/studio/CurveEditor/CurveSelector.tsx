@@ -14,7 +14,11 @@ export const CurveSelector: React.FC<{
   const selectedCurveName = palette[curveKey]?.name;
 
   function onCurveSelect(newCurve: Curve) {
-    palette[curveKey] = newCurve;
+    if (newCurve?.name == palette?.[curveKey]?.name) {
+      palette[curveKey] = null;
+    } else {
+      palette[curveKey] = newCurve;
+    }
     dispatch({ type: 'UPDATE_CURRENT_PALETTE', payload: { palette } });
   }
 
@@ -24,7 +28,7 @@ export const CurveSelector: React.FC<{
         <button
           key={k}
           onClick={() => onCurveSelect(presetCurves?.[k](palette, currentMixerTab))}
-          className={`flex flex-1 items-center px-3 w-full border-b last:border-b-0 border-neutral-800 ${
+          className={`flex text-sm flex-1 items-center px-3 w-full border-b last:border-b-0 border-neutral-800 ${
             k == selectedCurveName
               ? 'text-emerald-200 bg-gradient-to-t from-emerald-700/30 to-emerald-600/30 shadow-xl'
               : 'text-neutral-300 shadow-inner'

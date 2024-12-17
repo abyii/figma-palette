@@ -100,7 +100,7 @@ const PaletteMixer: React.FC<{
                 type="range"
                 max={roofValue}
                 min={floorValue}
-                step={currentMixerTab == 'HUE' ? 1 : 0.01}
+                step={currentMixerTab == 'HUE' ? 1 : 0.001}
                 className="w-full cursor-pointer "
                 style={{
                   writingMode: 'vertical-lr',

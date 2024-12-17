@@ -20,7 +20,10 @@ export const CurveMixer: React.FC<{
     dispatch({ type: 'UPDATE_CURRENT_PALETTE', payload: { palette } });
   }
 
-  if (!curve) return null;
+  if (!curve)
+    return (
+      <div className="flex flex-1 bg-gradient-to-t from-neutral-900 to-neutral-950 justify-center items-center"></div>
+    );
   return (
     <div className="flex w-full flex-col bg-gradient-to-b from-neutral-600 to-neutral-700">
       {Object.keys(curve.parameters).map((k) => (

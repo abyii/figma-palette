@@ -4,7 +4,6 @@ import PaletteDisplay from './PaletteDisplay';
 import PaletteMixer from './PaletteMixer';
 import NofShades from './MidStrip';
 import CurveEditor from './CurveEditor';
-import BottomBar from './BottomBar';
 
 const PaletteStudio: React.FC<{
   state: State;
@@ -24,7 +23,6 @@ const PaletteStudio: React.FC<{
       />
       <NofShades dispatch={dispatch} palette={palette} />
       <CurveEditor palette={palette} currentMixerTab={currentMixerTab} dispatch={dispatch} />
-      <BottomBar />
     </div>
   );
 };

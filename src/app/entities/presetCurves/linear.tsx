@@ -8,6 +8,7 @@ export function getLinearCurve(palette: Palette, mode: MixerTab) {
   return new Curve(
     'Linear',
     'y = mx + c',
+    'text-lg',
     palette,
     mode,
     function (palette: Palette, mode: MixerTab) {
