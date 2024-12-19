@@ -14,6 +14,10 @@ export type DispatchAction =
     }
   | {
       type: 'DELETE_CURRENT_PALETTE';
+    }
+  | {
+      type: 'RENAME_CURRENT_PALETTE';
+      payload: string;
     };
 
 export type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';

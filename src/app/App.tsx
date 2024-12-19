@@ -8,6 +8,7 @@ import ReadMe from './components/ReadMe';
 import { paletteAlphas } from './entities/paletteAlphas';
 import PaletteStudio from './components/studio';
 import BottomBar from './components/studio/BottomBar';
+import SideBySide from './components/SideBySide';
 
 const initialState: State = {
   palettes: [new Palette(paletteAlphas[0])],
@@ -44,6 +45,12 @@ function reducer(state: State, action: DispatchAction): State {
             : Math.max(state?.selectedIndex - 1, 0),
         palettes: newPalettes,
       };
+    case 'RENAME_CURRENT_PALETTE':
+      state.palettes[state.selectedIndex].name = action.payload;
+      return {
+        ...state,
+      };
+
     default:
       return state;
   }
@@ -58,7 +65,7 @@ function App() {
       {state.selectedIndex == 'README' ? (
         <ReadMe />
       ) : state.selectedIndex == 'CMP' ? (
-        <div></div>
+        <SideBySide state={state} />
       ) : (
         <>
           <PaletteStudio state={state} dispatch={dispatch} />

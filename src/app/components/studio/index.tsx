@@ -14,7 +14,7 @@ const PaletteStudio: React.FC<{
 
   return (
     <div className={`h-full flex flex-col bg-neutral-700`}>
-      <PaletteDisplay palette={palette} />
+      <PaletteDisplay palette={palette} offsetTop={true} />
       <PaletteMixer
         dispatch={dispatch}
         palette={palette}

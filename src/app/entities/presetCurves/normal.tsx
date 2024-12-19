@@ -27,7 +27,7 @@ export function getNormalCurve(palette: Palette, mode: MixerTab) {
           minA,
           maxA,
           (maxA - minA) / 100,
-          1.0,
+          0.9,
           'Y-multiplier. Controls the amplitude of the Curve.'
         ),
         k: new Parameter('k', minK, maxK, (maxK - minK) / 100, 0.15, 'X-mulltiplier. Controls the width of the Curve.'),

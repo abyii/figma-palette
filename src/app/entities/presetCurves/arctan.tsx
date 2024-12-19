@@ -38,7 +38,7 @@ export function getArcTanCurve(palette: Palette, mode: MixerTab) {
           0.4,
           'X-mulltiplier. Shrink or Expand the curve horizontally.'
         ),
-        d: new Parameter('d', minD, maxD, (maxD - minD) / 100, 0.65, 'Shift the curve to left or right.'),
+        d: new Parameter('d', minD, maxD, (maxD - minD) / 100, 0.67, 'Shift the curve to left or right.'),
         c: new Parameter('c', minC, maxC, (maxC - minC) / 100, 0.5, 'Lift or drop the Curve.'),
       };
     },

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Palette } from '../../entities/Palette';
 
-const PaletteDisplay: React.FC<{ palette: Palette }> = ({ palette }) => {
+const PaletteDisplay: React.FC<{ palette: Palette; offsetTop?: boolean }> = ({ palette, offsetTop = false }) => {
   const [bgColor, setBgColor] = useState<'bg-white' | 'bg-black'>('bg-white');
   return (
     <div
-      className={`w-full flex flex-col p-3 pt-12 ${bgColor}`}
+      className={`w-full flex flex-col p-3 ${offsetTop ? 'pt-12' : null} ${bgColor}`}
       onClick={() => setBgColor(bgColor == 'bg-white' ? 'bg-black' : 'bg-white')}
     >
       <div className={`flex shadow-md h-20 ${bgColor == 'bg-white' ? 'shadow-neutral-500' : 'shadow-black'}`}>
