@@ -1,8 +1,23 @@
-import { Palette } from '../utils';
+import { Palette } from '../entities/Palette';
 
 export type State = {
   palettes: Palette[];
-  selectedIndex: number;
+  selectedIndex: number | 'README' | 'CMP'; // readme tab or any palette or compare tab.
 };
 
-export type Action = { newState: State };
+export type DispatchAction =
+  | { type: 'CREATE_PALETTE' }
+  | { type: 'SELECT_INDEX'; payload: State['selectedIndex'] }
+  | {
+      type: 'UPDATE_CURRENT_PALETTE';
+      payload: { palette: Palette };
+    }
+  | {
+      type: 'DELETE_CURRENT_PALETTE';
+    }
+  | {
+      type: 'RENAME_CURRENT_PALETTE';
+      payload: string;
+    };
+
+export type MixerTab = 'LUMA' | 'CHROMA' | 'HUE';

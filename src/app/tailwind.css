@@ -1,59 +1,82 @@
 @tailwind base;
 @tailwind components;
 
-
 * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  body {
-    margin: 0;
-    padding: 0;
-  }
-  
-  a {
-    text-decoration: none;
-  }
-  
-  ::-webkit-scrollbar {
-    width: 5px;
-    
-  }
-  
-  ::-webkit-scrollbar:horizontal {
-    height: 5px;
-    
-  }
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  ::-webkit-scrollbar-track .dark {
-    background: #000;
-  }
-  
-  ::-webkit-scrollbar-track:horizontal {
-    background: transparent;
-  }
-  
-  ::-webkit-scrollbar-track:horizontal .dark {
-    background: #000;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb .dark {
-    background: rgb(81, 81, 81);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: rgb(158, 158, 158);
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(98, 98, 98);
-  }
-  
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 0px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track .dark {
+  background: #000;
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track:horizontal .dark {
+  background: #000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb .dark {
+  background: rgb(81, 81, 81);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(158, 158, 158);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(98, 98, 98);
+}
+
+/* slider */
+
+input[type='range']::-webkit-slider-runnable-track {
+  background-color: #333;
+  border-radius: 100px;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* slider thumb */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 100px;
+}
+
+input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 100px;
+}
+
+input[type='color']::-webkit-color-swatch {
+  border: none;
+}
+
 @tailwind utilities;

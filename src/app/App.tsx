@@ -1,35 +1,78 @@
-import React, { useState } from 'react';
-import { State } from './types';
-import { Palette } from './utils';
-import Editor from './components/Editor';
-import PaletteDisplay from './components/PaletteDisplay';
 import './index.css';
-import Button from './components/ui/Button';
+import React, { useReducer } from 'react';
+import { State, DispatchAction } from './types';
+import { MAX_PALETTES } from './config';
+import { Palette } from './entities/Palette';
+import Tabs from './components/Tabs';
 import ReadMe from './components/ReadMe';
+import { paletteAlphas } from './entities/paletteAlphas';
+import PaletteStudio from './components/studio';
+import BottomBar from './components/studio/BottomBar';
+import SideBySide from './components/SideBySide';
+
+const initialState: State = {
+  palettes: [new Palette(paletteAlphas[0])],
+  selectedIndex: 0,
+};
+
+function reducer(state: State, action: DispatchAction): State {
+  switch (action.type) {
+    case 'CREATE_PALETTE':
+      if (state.palettes.length >= MAX_PALETTES) return state;
+      const newPalette = new Palette(paletteAlphas[state.palettes.length]);
+      return {
+        palettes: [...state.palettes, newPalette],
+        selectedIndex: state.palettes.length,
+      };
+    case 'SELECT_INDEX':
+      return {
+        ...state,
+        selectedIndex: action.payload,
+      };
+    case 'UPDATE_CURRENT_PALETTE':
+      const newState: State = { selectedIndex: state.selectedIndex, palettes: state.palettes };
+      newState.palettes[newState.selectedIndex] = action.payload.palette;
+      return newState;
+    case 'DELETE_CURRENT_PALETTE':
+      if (state.palettes.length == 1) return state;
+      const newPalettes = state.palettes.filter((_, i) => i != state.selectedIndex);
+      return {
+        selectedIndex:
+          state?.selectedIndex == 'CMP'
+            ? 'CMP'
+            : state?.selectedIndex == 'README'
+            ? 'README'
+            : Math.max(state?.selectedIndex - 1, 0),
+        palettes: newPalettes,
+      };
+    case 'RENAME_CURRENT_PALETTE':
+      state.palettes[state.selectedIndex].name = action.payload;
+      return {
+        ...state,
+      };
+
+    default:
+      return state;
+  }
+}
 
 function App() {
-  const [state, setState] = useState<State>({ palettes: [new Palette('A')], selectedIndex: 0 });
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
-    <div className="w-full h-full flex bg-zinc-300 overflow-x-auto">
-      <ReadMe />
-      {state.palettes.map((_, i) => (
-        <div key={i} className="flex rounded-md m-5 shadow-md">
-          <PaletteDisplay index={i} state={state} setState={setState} />
-          {i == state.selectedIndex ? <Editor state={state} setState={setState} /> : null}
-        </div>
-      ))}
-      <Button
-        className="my-5 text-lg font-semibold shadow-md"
-        onClick={() => {
-          setState({
-            ...state,
-            palettes: [...state.palettes, new Palette(String.fromCharCode(state.palettes.length + 65))],
-          });
-        }}
-      >
-        +
-      </Button>
-    </div>
+    <main className="w-full h-full flex flex-col bg-black overflow-x-hidden text-sm">
+      <Tabs state={state} dispatch={dispatch} />
+      {state.selectedIndex == 'README' ? (
+        <ReadMe />
+      ) : state.selectedIndex == 'CMP' ? (
+        <SideBySide state={state} />
+      ) : (
+        <>
+          <PaletteStudio state={state} dispatch={dispatch} />
+          <BottomBar state={state} dispatch={dispatch} />
+        </>
+      )}
+    </main>
   );
 }
 
