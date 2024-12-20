@@ -5,7 +5,7 @@ const Button: React.FC<JSX.IntrinsicElements['button']> = ({ children, className
     <button
       {...props}
       className={
-        'px-3 py-1 font-semibold text-xs cursor-pointer rounded-full transition-colors duration-200' + ' ' + className
+        className + ' ' + 'px-3 py-1 font-semibold text-xs cursor-pointer rounded-full transition-colors duration-200'
       }
     >
       {children}

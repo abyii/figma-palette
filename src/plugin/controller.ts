@@ -1,5 +1,3 @@
-import { Palette } from '../app/entities/Palette';
-
 figma.showUI(__html__);
 
 figma.ui.resize(675, 650);
@@ -7,38 +5,37 @@ figma.ui.resize(675, 650);
 type PluginMessage = {
   type: 'add-to-figma';
   createVars: boolean;
-  palette: Palette;
+  colors: string[];
+  paletteName: string;
 };
 
-figma.ui.onmessage = (msg: PluginMessage) => {
+figma.ui.onmessage = async (msg: PluginMessage) => {
   if (msg.type === 'add-to-figma') {
     const frame = figma.createFrame();
     frame.layoutMode = 'HORIZONTAL';
     frame.layoutPositioning = 'AUTO';
     frame.overflowDirection = 'HORIZONTAL';
     frame.fills = [];
-    let collection;
+    frame.name = 'Palette ' + msg?.paletteName;
+    let collection: VariableCollection | null = null;
     if (msg.createVars) {
-      collection = figma.variables.createVariableCollection(`${msg?.palette?.name}-colors`);
+      collection = figma.variables.createVariableCollection(`${msg?.paletteName}-colors`);
     }
-    msg?.palette?.lightnessChannel.forEach((_, i) => {
+    msg?.colors.forEach(async (_, i) => {
       const rect = figma.createRectangle();
-      const oklchColor = `oklch(${msg?.palette.lightnessChannel[i]} ${msg?.palette.chromaChannel[i]} ${msg?.palette.hueChannel[i]})`;
-      rect.fills = [figma.util.solidPaint(oklchColor)];
-      frame.appendChild(rect);
       if (msg.createVars) {
-        const colorVariable = figma.variables.createVariable(`${msg?.palette?.name}-${i}`, collection.id, 'COLOR');
-        colorVariable.setValueForMode(collection.modes[0].modeId, figma.util.solidPaint(oklchColor).color);
+        const colorVariable = figma.variables.createVariable(`${msg?.paletteName}-${i}`, collection?.id, 'COLOR');
+        colorVariable.setValueForMode(collection.modes[0].modeId, figma.util.solidPaint(msg?.colors?.[i]).color);
+        rect.fills = [figma.variables.setBoundVariableForPaint(rect.fills[0], 'color', colorVariable)];
+      } else {
+        rect.fills = [figma.util.solidPaint(msg?.colors?.[i])];
       }
+      frame.appendChild(rect);
     });
 
     figma.currentPage.appendChild(frame);
     figma.currentPage.selection = [frame];
     figma.viewport.scrollAndZoomIntoView([frame]);
-    figma.notify(
-      `Added ${msg.palette?.lightnessChannel?.length} Shades as Rectangles ${
-        msg.createVars && 'and Created Variables.'
-      }`
-    );
+    figma.notify(`Added ${msg?.colors?.length} Shades as Rectangles ${msg?.createVars && 'and Created Variables.'}`);
   }
 };
