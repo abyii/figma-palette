@@ -22,7 +22,7 @@ const ReadMe = () => {
         <strong>Lightness</strong> (How Bright the color is. 0-1), <strong>Chroma</strong> (How colorful the color is.
         0-0.37), and <strong>Hue</strong> (The kind of color. 0deg-360deg). The ability to control these individual
         parameters makes it perfect for building palettes to be used in interface design, because you can use these
-        parameters to establish heirarchy, contrast, attention, etc.
+        parameters to establish hierarchy, contrast, attention, etc.
       </p>
       <h2 className="text-xl font-semibold">Why OKLCH over HSL?</h2>
       <p className="font-normal text-neutral-400">
@@ -33,7 +33,7 @@ const ReadMe = () => {
       <h2 className="text-xl font-semibold">Use Mathematical Relations to build your perfect Palette.</h2>
       <p className="font-normal text-neutral-400">
         You can use mathematical relations to build your perfect palette. For each of the 3 parameters, you can use a
-        Mathematical to relation to decide how each shade of the palette vary from each other or relate to each other.
+        Mathematical relation to decide how each shade of the palette vary from each other or relate to each other.
       </p>
       <p className="font-normal text-neutral-400">
         An common example of how the equations can be used is: Using a Linear or Arctan function for Lightness, and
