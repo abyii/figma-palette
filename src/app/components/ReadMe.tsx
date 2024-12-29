@@ -10,9 +10,9 @@ const ReadMe = () => {
         donating. Your support helps me dedicate time to improving and maintaining this tool, ensuring it stays free and
         accessible for everyone. Thank you for being a part of this journey!
       </p>
-      <a href="https://shop.abyi.xyz" target="_blank">
+      <a href="https://github.com/sponsors/abyii" target="_blank">
         <Button className="bg-emerald-900/50 hover:bg-emerald-800/50 text-emerald-500 hover:text-emerald-400">
-          Donate 💖
+          Donate On GitHub 💖
         </Button>
       </a>
       <hr className="border-neutral-600 my-5" />

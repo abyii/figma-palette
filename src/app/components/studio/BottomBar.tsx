@@ -24,7 +24,7 @@ const BottomBar: React.FC<{
         >
           Delete Palette
         </Button>
-        <a href="https://shop.abyi.xyz" target="_blank">
+        <a href="https://github.com/sponsors/abyii" target="_blank">
           <Button className="bg-emerald-900/50 hover:bg-emerald-800/50 text-emerald-500 hover:text-emerald-400">
             Donate 💖
           </Button>

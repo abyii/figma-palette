@@ -6,5 +6,7 @@
   "ui": "dist/ui.html",
   "editorType": ["figma"],
   "documentAccess": "dynamic-page",
-  "networkAccess": { "allowedDomains": ["https://abyi.xyz", "https://shop.abyi.xyz", "https://cdnjs.cloudflare.com"] }
+  "networkAccess": {
+    "allowedDomains": ["https://abyi.xyz", "https://github.com/sponsors/abyii", "https://cdnjs.cloudflare.com"]
+  }
 }
