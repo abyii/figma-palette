@@ -26,7 +26,7 @@ const BottomBar: React.FC<{
         </Button>
         <a href="https://github.com/sponsors/abyii" target="_blank">
           <Button className="bg-emerald-900/50 hover:bg-emerald-800/50 text-emerald-500 hover:text-emerald-400">
-            Donate 💖
+            Donate on GitHub 💖
           </Button>
         </a>
       </div>
